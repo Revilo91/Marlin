@@ -831,7 +831,7 @@ void Temperature::min_temp_error(const heater_ind_t heater) {
 
 #if HOTENDS
   #if ENABLED(PID_DEBUG)
-    extern bool PID_Debug_Flag;
+    extern bool pid_debug_flag;
   #endif
 
   float Temperature::get_pid_output_hotend(const uint8_t E_NAME) {
@@ -914,7 +914,7 @@ void Temperature::min_temp_error(const heater_ind_t heater) {
       #endif // PID_OPENLOOP
 
       #if ENABLED(PID_DEBUG)
-        if (ee == active_extruder && PID_Debug_Flag) {
+        if (ee == active_extruder && pid_debug_flag) {
           SERIAL_ECHO_START();
           SERIAL_ECHOPAIR(STR_PID_DEBUG, ee, STR_PID_DEBUG_INPUT, temp_hotend[ee].celsius, STR_PID_DEBUG_OUTPUT, pid_output);
           #if DISABLED(PID_OPENLOOP)
@@ -945,7 +945,9 @@ void Temperature::min_temp_error(const heater_ind_t heater) {
 #endif // HOTENDS
 
 #if ENABLED(PIDTEMPBED)
-
+  #if ENABLED(PID_BED_DEBUG)
+    extern bool pid_bed_debug_flag;
+  #endif
   float Temperature::get_pid_output_bed() {
 
     #if DISABLED(PID_OPENLOOP)
@@ -989,18 +991,18 @@ void Temperature::min_temp_error(const heater_ind_t heater) {
 
     #endif // PID_OPENLOOP
 
-    #if ENABLED(PID_BED_DEBUG)
-    {
-      SERIAL_ECHO_START();
-      SERIAL_ECHOLNPAIR(
-        " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output,
-        #if DISABLED(PID_OPENLOOP)
-          STR_PID_DEBUG_PTERM, work_pid.Kp,
-          STR_PID_DEBUG_ITERM, work_pid.Ki,
-          STR_PID_DEBUG_DTERM, work_pid.Kd,
-        #endif
-      );
-    }
+    #if ENABLED(PID_BED_DEBUG)    
+      if (pid_bed_debug_flag) {
+        SERIAL_ECHO_START();
+        SERIAL_ECHOLNPAIR(
+          " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output,
+          #if DISABLED(PID_OPENLOOP)
+            STR_PID_DEBUG_PTERM, work_pid.Kp,
+            STR_PID_DEBUG_ITERM, work_pid.Ki,
+            STR_PID_DEBUG_DTERM, work_pid.Kd,
+          #endif
+        );
+      }    
     #endif
 
     return pid_output;

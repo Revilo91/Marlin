@@ -45,6 +45,7 @@
 
 #if ENABLED(PID_DEBUG)
   bool pid_debug_flag = 0;
+  bool pid_bed_debug_flag = 0;
 #endif
 
 void GcodeSuite::M303() {
@@ -55,6 +56,10 @@ void GcodeSuite::M303() {
       SERIAL_ECHO_START();
       SERIAL_ECHOPGM("PID Debug ");
       serialprintln_onoff(pid_debug_flag);
+      pid_bed_debug_flag = !pid_bed_debug_flag;
+      SERIAL_ECHO_START();
+      SERIAL_ECHOPGM("PID Bed Debug ");
+      serialprintln_onoff(pid_bed_debug_flag);
       return;
     }
   #endif
