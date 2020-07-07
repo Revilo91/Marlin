@@ -482,10 +482,9 @@
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
-    #define DEFAULT_Kp 17.76
-    #define DEFAULT_Ki 1.71
-    #define DEFAULT_Kd 46.20
-
+  #define DEFAULT_Kp 27.25
+  #define DEFAULT_Ki 2.78
+  #define DEFAULT_Kd 66.75
   // Ultimaker
   //#define DEFAULT_Kp 22.2
   //#define DEFAULT_Ki 1.08
@@ -548,10 +547,10 @@
   //#define DEFAULT_bedKi 1.41
   //#define DEFAULT_bedKd 1675.16
 
-  // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
-  #define DEFAULT_bedKp 119.69
-  #define DEFAULT_bedKi 22.83
-  #define DEFAULT_bedKd 156.88
+  // FIND YOUR OWN: "M303 E-1 C5 S60" to run autotune on the bed at 60 degreesC for 5 cycles.
+  #define DEFAULT_bedKp 182.19
+  #define DEFAULT_bedKi 36.40
+  #define DEFAULT_bedKd 607.90
 #endif // PIDTEMPBED
 
 // @section extruder
