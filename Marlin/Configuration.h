@@ -467,7 +467,7 @@
 
 // Comment the following line to disable PID and enable bang-bang.
 #define PIDTEMP
-#define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
+#define BANG_MAX 127     // Limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // Limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1 0.95      // Smoothing factor within any PID loop
 #if ENABLED(PIDTEMP)
@@ -482,9 +482,9 @@
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
-  #define DEFAULT_Kp 27.25
-  #define DEFAULT_Ki 2.78
-  #define DEFAULT_Kd 66.75
+   #define DEFAULT_Kp 6.80
+   #define DEFAULT_Ki 0.57
+   #define DEFAULT_Kd 20.17
 
   // Ultimaker
   //#define DEFAULT_Kp 22.2
