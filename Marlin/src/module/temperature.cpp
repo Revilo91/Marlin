@@ -598,6 +598,7 @@ volatile bool Temperature::raw_temps_ready = false;
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
+          SERIAL_ECHOPGM("M301 "); SERIAL_ECHOPAIR("Kp ", tune_pid.Kp); SERIAL_ECHOPAIR("Ki ", tune_pid.Ki); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
         #elif ENABLED(PIDTEMP)
           say_default_(); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
@@ -999,7 +1000,7 @@ void Temperature::min_temp_error(const heater_id_t heater_id) {
 
     #endif // PID_OPENLOOP
 
-    #if ENABLED(PID_BED_DEBUG)    
+    #if ENABLED(PID_BED_DEBUG)
       if (pid_bed_debug_flag) {
         SERIAL_ECHO_START();
         SERIAL_ECHOLNPAIR(
@@ -1010,7 +1011,7 @@ void Temperature::min_temp_error(const heater_id_t heater_id) {
             STR_PID_DEBUG_DTERM, work_pid.Kd,
           #endif
         );
-      }    
+      }
     #endif
 
     return pid_output;
