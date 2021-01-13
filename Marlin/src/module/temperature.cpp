@@ -500,7 +500,7 @@ volatile bool Temperature::raw_temps_ready = false;
               LIMIT(bias, 20, max_pow - 20);
               d = (bias > max_pow >> 1) ? max_pow - 1 - bias : bias;
 
-              SERIAL_ECHOPAIR(STR_BIAS, bias, STR_D_COLON, d, STR_T_MIN, minT, STR_T_MAX, maxT);
+              SERIAL_ECHOLNPAIR(STR_BIAS, bias, STR_D_COLON, d, STR_T_MIN, minT, STR_T_MAX, maxT);
               if (cycles > 2) {
                 const float Ku = (4.0f * d) / (float(M_PI) * (maxT - minT) * 0.5f),
                             Tu = float(t_low + t_high) * 0.001f,
