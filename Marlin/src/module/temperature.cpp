@@ -598,7 +598,7 @@ volatile bool Temperature::raw_temps_ready = false;
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
           say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
-          SERIAL_ECHOPGM("M301 "); SERIAL_ECHOPAIR(" Kp", tune_pid.Kp); SERIAL_ECHOPAIR(" Ki", tune_pid.Ki); SERIAL_ECHOLNPAIR(" Kd", tune_pid.Kd);
+          SERIAL_ECHOPGM("M301 "); SERIAL_ECHOPAIR(" P", tune_pid.Kp); SERIAL_ECHOPAIR(" I", tune_pid.Ki); SERIAL_ECHOLNPAIR(" D", tune_pid.Kd);
         #elif ENABLED(PIDTEMP)
           say_default_(); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
