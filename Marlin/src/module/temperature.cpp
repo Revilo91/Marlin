@@ -1102,16 +1102,16 @@ void Temperature::min_temp_error(const heater_id_t heater_id) {
     #endif // PID_OPENLOOP
 
     #if ENABLED(PID_BED_DEBUG)
-    {
-      SERIAL_ECHO_MSG(
-        " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output,
-        #if DISABLED(PID_OPENLOOP)
-          STR_PID_DEBUG_PTERM, work_pid.Kp,
-          STR_PID_DEBUG_ITERM, work_pid.Ki,
-          STR_PID_DEBUG_DTERM, work_pid.Kd,
-        #endif
-      );
-    }
+      if (pid_bed_debug_flag){
+        SERIAL_ECHO_MSG(
+          " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output,
+          #if DISABLED(PID_OPENLOOP)
+            STR_PID_DEBUG_PTERM, work_pid.Kp,
+            STR_PID_DEBUG_ITERM, work_pid.Ki,
+            STR_PID_DEBUG_DTERM, work_pid.Kd,
+          #endif
+        );
+      }
     #endif
 
     return pid_output;
