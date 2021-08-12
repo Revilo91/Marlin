@@ -20,7 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-#if defined(ARDUINO_ARCH_STM32) && !defined(STM32GENERIC)
+#include "../platforms.h"
+
+#ifdef HAL_STM32
 
 #include "../../inc/MarlinConfig.h"
 
@@ -163,11 +165,9 @@ static SPISettings spiConfig;
     }
     spiConfig = SPISettings(clock, MSBFIRST, SPI_MODE0);
 
-    #if ENABLED(CUSTOM_SPI_PINS)
-      SPI.setMISO(SD_MISO_PIN);
-      SPI.setMOSI(SD_MOSI_PIN);
-      SPI.setSCLK(SD_SCK_PIN);
-    #endif
+    SPI.setMISO(SD_MISO_PIN);
+    SPI.setMOSI(SD_MOSI_PIN);
+    SPI.setSCLK(SD_SCK_PIN);
 
     SPI.begin();
   }
@@ -193,7 +193,7 @@ static SPISettings spiConfig;
    *
    * @details Uses DMA
    */
-  void spiRead(uint8_t* buf, uint16_t nbyte) {
+  void spiRead(uint8_t *buf, uint16_t nbyte) {
     if (nbyte == 0) return;
     memset(buf, 0xFF, nbyte);
     SPI.transfer(buf, nbyte);
@@ -218,7 +218,7 @@ static SPISettings spiConfig;
    *
    * @details Use DMA
    */
-  void spiSendBlock(uint8_t token, const uint8_t* buf) {
+  void spiSendBlock(uint8_t token, const uint8_t *buf) {
     uint8_t rxBuf[512];
     SPI.transfer(token);
     SPI.transfer((uint8_t*)buf, &rxBuf, 512);
@@ -226,4 +226,4 @@ static SPISettings spiConfig;
 
 #endif // SOFTWARE_SPI
 
-#endif // ARDUINO_ARCH_STM32 && !STM32GENERIC
+#endif // HAL_STM32
