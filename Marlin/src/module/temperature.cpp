@@ -657,54 +657,6 @@ volatile bool Temperature::raw_temps_ready = false;
           maxT = target;
         }
 
-<<<<<<< HEAD
-        if (!heating && current_temp < target) {
-          if (ELAPSED(ms, t1 + 5000UL)) {
-            heating = true;
-            t2 = ms;
-            t_low = t2 - t1;
-            if (cycles > 0) {
-              const long max_pow = GHV(MAX_BED_POWER, PID_MAX);
-              bias += (d * (t_high - t_low)) / (t_low + t_high);
-              LIMIT(bias, 20, max_pow - 20);
-              d = (bias > max_pow >> 1) ? max_pow - 1 - bias : bias;
-
-              SERIAL_ECHOLNPAIR(STR_BIAS, bias, STR_D_COLON, d, STR_T_MIN, minT, STR_T_MAX, maxT);
-              if (cycles > 2) {
-                const float Ku = (4.0f * d) / (float(M_PI) * (maxT - minT) * 0.5f),
-                            Tu = float(t_low + t_high) * 0.001f,
-                            pf = isbed ? 0.2f : 0.6f,
-                            df = isbed ? 1.0f / 3.0f : 1.0f / 8.0f;
-
-                SERIAL_ECHOPAIR(STR_KU, Ku, STR_TU, Tu);
-                if (isbed) { // Do not remove this otherwise PID autotune won't work right for the bed!
-                  tune_pid.Kp = Ku * 0.2f;
-                  tune_pid.Ki = 2 * tune_pid.Kp / Tu;
-                  tune_pid.Kd = tune_pid.Kp * Tu / 3;
-                  SERIAL_ECHOLNPGM("\n" " No overshoot"); // Works far better for the bed. Classic and some have bad ringing.
-                  SERIAL_ECHOLNPAIR(STR_KP, tune_pid.Kp, STR_KI, tune_pid.Ki, STR_KD, tune_pid.Kd);
-                }
-                else {
-                  tune_pid.Kp = Ku * pf;
-                  tune_pid.Kd = tune_pid.Kp * Tu * df;
-                  tune_pid.Ki = 2 * tune_pid.Kp / Tu;
-                  SERIAL_ECHOLNPGM("\n" STR_CLASSIC_PID);
-                  SERIAL_ECHOLNPAIR(STR_KP, tune_pid.Kp, STR_KI, tune_pid.Ki, STR_KD, tune_pid.Kd);
-                }
-
-                /**
-                tune_pid.Kp = 0.33 * Ku;
-                tune_pid.Ki = tune_pid.Kp / Tu;
-                tune_pid.Kd = tune_pid.Kp * Tu / 3;
-                SERIAL_ECHOLNPGM(" Some overshoot");
-                SERIAL_ECHOLNPAIR(" Kp: ", tune_pid.Kp, " Ki: ", tune_pid.Ki, " Kd: ", tune_pid.Kd, " No overshoot");
-                tune_pid.Kp = 0.2 * Ku;
-                tune_pid.Ki = 2 * tune_pid.Kp / Tu;
-                tune_pid.Kd = tune_pid.Kp * Tu / 3;
-                SERIAL_ECHOPAIR(" Kp: ", tune_pid.Kp, " Ki: ", tune_pid.Ki, " Kd: ", tune_pid.Kd);
-                */
-              }
-=======
         if (!heating && current_temp < target && ELAPSED(ms, t1 + 5000UL)) {
           heating = true;
           t2 = ms;
@@ -732,7 +684,6 @@ volatile bool Temperature::raw_temps_ready = false;
               else
                 SERIAL_ECHOLNPGM(STR_CLASSIC_PID);
               SERIAL_ECHOLNPAIR(STR_KP, tune_pid.Kp, STR_KI, tune_pid.Ki, STR_KD, tune_pid.Kd);
->>>>>>> 59324a411f022cbe6757f15924120ad1976e850b
             }
           }
           SHV((bias + d) >> 1);
@@ -791,22 +742,12 @@ volatile bool Temperature::raw_temps_ready = false;
       if (cycles > ncycles && cycles > 2) {
         SERIAL_ECHOLNPGM(STR_PID_AUTOTUNE_FINISHED);
 
-<<<<<<< HEAD
-        #if HAS_PID_FOR_BOTH
-          const char * const estring = GHV(PSTR("bed"), NUL_STR);
-          say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
-          say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
-          say_default_(); serialprintPGM(estring); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
-          SERIAL_ECHOPGM("M301 "); SERIAL_ECHOPAIR(" P", tune_pid.Kp); SERIAL_ECHOPAIR(" I", tune_pid.Ki); SERIAL_ECHOLNPAIR(" D", tune_pid.Kd);
-        #elif ENABLED(PIDTEMP)
-=======
         #if EITHER(PIDTEMPBED, PIDTEMPCHAMBER)
           PGM_P const estring = GHV(PSTR("chamber"), PSTR("bed"), NUL_STR);
           say_default_(); SERIAL_ECHOPGM_P(estring); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); SERIAL_ECHOPGM_P(estring); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
           say_default_(); SERIAL_ECHOPGM_P(estring); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
         #else
->>>>>>> 59324a411f022cbe6757f15924120ad1976e850b
           say_default_(); SERIAL_ECHOLNPAIR("Kp ", tune_pid.Kp);
           say_default_(); SERIAL_ECHOLNPAIR("Ki ", tune_pid.Ki);
           say_default_(); SERIAL_ECHOLNPAIR("Kd ", tune_pid.Kd);
@@ -1244,18 +1185,6 @@ void Temperature::min_temp_error(const heater_id_t heater_id) {
     #endif // PID_OPENLOOP
 
     #if ENABLED(PID_BED_DEBUG)
-<<<<<<< HEAD
-      if (pid_bed_debug_flag){
-        SERIAL_ECHO_MSG(
-          " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output,
-          #if DISABLED(PID_OPENLOOP)
-            STR_PID_DEBUG_PTERM, work_pid.Kp,
-            STR_PID_DEBUG_ITERM, work_pid.Ki,
-            STR_PID_DEBUG_DTERM, work_pid.Kd,
-          #endif
-        );
-      }
-=======
       if (pid_debug_flag) {
         SERIAL_ECHO_MSG(
           " PID_BED_DEBUG : Input ", temp_bed.celsius, " Output ", pid_output
@@ -1329,7 +1258,6 @@ void Temperature::min_temp_error(const heater_id_t heater_id) {
         #endif
       );
     }
->>>>>>> 59324a411f022cbe6757f15924120ad1976e850b
     #endif
 
     return pid_output;
